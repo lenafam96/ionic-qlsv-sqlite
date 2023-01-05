@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonContent,
   IonHeader,
   IonPage,
@@ -12,96 +13,85 @@ import ListStudent from "../components/ListStudent";
 import AddStudent from "../components/AddStudent";
 import EditStudent from "../components/EditStudent";
 import "./Home.css";
+import { SQLiteDBConnection } from "react-sqlite-hook";
+import { sqlite } from "../App";
 
 const Home: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [addPageActive, setAddPageActive] = useState(false);
   const [editPageActive, setEditPageActive] = useState(false);
   const [currentId, setCurrentId] = useState("");
 
-  let proxy = "http://172.31.109.52:8000/".replace("",'')
-
-  
   const getData = async (sort: string = "", search: string = "") => {
-    if (search === "") {
-      if (sort === "asc") {
-        await axios
-
-          .get(`${proxy}students/score_asc`)
-
-          .then((response) => {
-            setData(response.data);
-          });
-      } else if (sort === "desc") {
-        await axios
-
-          .get(`${proxy}students/score_desc`)
-
-          .then((response) => {
-            setData(response.data);
-          });
-      } else {
-        await axios
-
-          .get(`${proxy}students/`)
-
-          .then((response) => {
-            setData(response.data);
-          });
-      }
-    } else {
-      await axios
-        .get(
-
-          `${proxy}students/search?search=${search}&sort=${sort}`
-
-        )
-        .then((response) => {
-          setData(response.data);
-        });
+    try {
+      let db: SQLiteDBConnection = await sqlite.createConnection("db_issue9");
+      await db.open();
+      // await db.run(
+      //   `INSERT INTO students (id,name,address,avatar,score) VALUES ('1','Hải','Thái Bình','localhost',10)`
+      // );
+      let res: any = await db.query("SELECT * FROM students");
+      setData(res.values);
+      await db.close();
+      sqlite.closeConnection("db_issue9");
+      return;
+    } catch (err) {
+      console.log(`Error: ${err}`);
+      return;
     }
   };
 
   const postData = async (data: any) => {
-    await axios
-
-      .post(`${proxy}students/create`, data)
-
-      .then((response) => {
-        console.log(response.data);
-        // setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // await axios
+    //   .post(`${proxy}students/create`, data)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     // setData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const putData = async (id: string, data: any) => {
-    await axios
-
-      .put(`${proxy}students/` + id, data)
-
-      .then((response) => {
-        console.log(response.data);
-        // setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // await axios
+    //   .put(`${proxy}students/` + id, data)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     // setData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const deleteData = async (id: string) => {
-    await axios
+    // await axios
+    //   .delete(`${proxy}students/` + id)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     // setData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
 
-      .delete(`${proxy}students/` + id)
-
-      .then((response) => {
-        console.log(response.data);
-        // setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const addStudent = async () => {
+    try {
+      let db: SQLiteDBConnection = await sqlite.createConnection("db_issue9");
+      await db.open();
+      await db.run(
+        `INSERT INTO students (id,name,address,avatar,score) VALUES ('2','Thảo','Thái Bình','localhost',9)`
+      );
+      let res: any = await db.query("SELECT * FROM students");
+      setData(res.values);
+      await db.close();
+      sqlite.closeConnection("db_issue9");
+      return;
+    } catch (err) {
+      console.log(`Error: ${err}`);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -160,6 +150,7 @@ const Home: React.FC = () => {
         ) : (
           ""
         )}
+        <IonButton onClick={addStudent}>Thêm</IonButton>
       </IonContent>
     </IonPage>
   );

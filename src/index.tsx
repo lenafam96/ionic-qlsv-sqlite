@@ -66,16 +66,19 @@ window.addEventListener("DOMContentLoaded", async () => {
     await db.open();
     console.log(db);
 
-    // let query = `
-    // CREATE TABLE IF NOT EXISTS test (
-    //   id INTEGER PRIMARY KEY NOT NULL,
-    //   name TEXT NOT NULL
-    // );
-    // `;
-
     let query = `
-    DROP TABLE IF EXISTS test;
+    CREATE TABLE IF NOT EXISTS students (
+      id TEXT PRIMARY KEY NOT NULL,
+      name TEXT NOT NULL,
+      address TEXT,
+      avatar TEXT,
+      score FLOAT NOT NULL
+    );
     `;
+
+    // let query = `
+    // DROP TABLE IF EXISTS test;
+    // `;
 
     const res: any = await db.execute(query);
     console.log(`res: ${JSON.stringify(res)}`);

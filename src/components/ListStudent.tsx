@@ -22,7 +22,7 @@ const ExploreContainer: React.FC<ContainerProps> = ({
   const [sort, setSort] = useState(false);
   const [search, setSearch] = useState("");
   useEffect(() => {
-    getData("", search);
+    // getData("", search);
   }, [search]);
 
   const sortButtonClick = () => {
@@ -33,7 +33,8 @@ const ExploreContainer: React.FC<ContainerProps> = ({
   return (
     <div className="container">
       <div className="wrapper">
-        <input className="input-search"
+        <input
+          className="input-search"
           type="text"
           placeholder="Search ..."
           name="search"
@@ -41,20 +42,25 @@ const ExploreContainer: React.FC<ContainerProps> = ({
         />
         <div className="wrapper-button">
           <div>
-            <button className="btn btn-add" onClick={() => setAddPageActive(!addPageActive)}>
+            <button
+              className="btn btn-add"
+              onClick={() => setAddPageActive(!addPageActive)}
+            >
               Thêm sinh viên
             </button>
           </div>
           <div>
-          {sort ? (
-            <button className="btn btn-sort" onClick={sortButtonClick}>Sắp xếp ASC </button>
-          ) : (
-            <button className="btn btn-sort" onClick={sortButtonClick}>Sắp xếp DESC </button>
-          )}
+            {sort ? (
+              <button className="btn btn-sort" onClick={sortButtonClick}>
+                Sắp xếp ASC{" "}
+              </button>
+            ) : (
+              <button className="btn btn-sort" onClick={sortButtonClick}>
+                Sắp xếp DESC{" "}
+              </button>
+            )}
           </div>
-          
         </div>
-        
       </div>
       <div className="container-table">
         <table>
@@ -88,7 +94,6 @@ const ExploreContainer: React.FC<ContainerProps> = ({
           </tbody>
         </table>
       </div>
-      
     </div>
   );
 };
