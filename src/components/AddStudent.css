@@ -1,0 +1,92 @@
+.container {
+  text-align: center;
+  /* position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%); */
+}
+
+.container a {
+  text-decoration: none;
+}
+
+a {
+  margin: 20px 0;
+  display: inline-block;
+}
+
+table,
+td,
+th,
+tr {
+  border: 1px solid #ccc;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+@media only screen and (max-width: 600px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  button.btn-a {
+    padding: 15px 20px;
+    background-color: teal;
+    border-radius: 5px;
+    color: white;
+    margin-top: 20px;
+
+    width: 100px;
+  }
+  button.btn-a:hover {
+    background-color: darkred;
+  }
+  .container-table {
+    padding: 10px;
+    margin-top: 25px;
+  }
+  .container-table > table > tbody > tr > td {
+    /* background-color: red; */
+    padding: 10px;
+  }
+  .container-table > table > tbody > tr > td > input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+  }
+  .container-table > table > tbody > tr > td > input:focus {
+    outline: none;
+  }
+  .container-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  label img.avatar {
+    vertical-align: middle;
+    width: 150px;
+    height: 150px;
+    /* border-radius: 50%; */
+    object-fit: cover;
+  }
+  label {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    /* background-color: red; */
+    text-align: center;
+    align-items: center;
+  }
+  img.pre {
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+}

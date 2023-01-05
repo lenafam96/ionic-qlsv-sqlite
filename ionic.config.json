@@ -1,0 +1,7 @@
+{
+  "name": "SQLiteTestApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
