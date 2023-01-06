@@ -22,7 +22,7 @@ const ExploreContainer: React.FC<ContainerProps> = ({
   const [sort, setSort] = useState(false);
   const [search, setSearch] = useState("");
   useEffect(() => {
-    // getData("", search);
+    getData("", search);
   }, [search]);
 
   const sortButtonClick = () => {

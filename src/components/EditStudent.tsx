@@ -1,6 +1,5 @@
 import "./EditStudent.css";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import {
   getStorage,
   ref,
@@ -8,6 +7,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../firebase";
+import { search } from "ionicons/icons";
+import { SQLiteDBConnection } from "react-sqlite-hook";
+import { sqlite } from "../App";
 
 interface ContainerProps {
   putData: (id: string, data: any) => void;
@@ -32,22 +34,28 @@ const EditStudent: React.FC<ContainerProps> = ({
   const [progre, setProgre] = useState(false);
   const [student, setStudent] = useState<any>({});
   const [isImage, setIsImage] = useState(false);
-  let proxy = "http://172.31.109.52:8000/".replace("", "");
+
   useEffect(() => {
     const getDataById = async (id: string) => {
-      await axios
+      try {
+        let db: SQLiteDBConnection = await sqlite.createConnection("db_issue9");
+        await db.open();
+        let query = `SELECT * FROM students WHERE id like '${id}'`;
 
-        .get(`${proxy}students/searchById?id=` + id)
-
-        .then((response) => {
-          console.log(response.data);
-          setStudent(response.data[0]);
-          setId(response.data[0].id);
-          setName(response.data[0].name);
-          setAddress(response.data[0].address);
-          setAvatar(response.data[0].avatar);
-          setScore(response.data[0].score);
-        });
+        let res: any = await db.query(query);
+        setStudent(res.values[0]);
+        setId(res.values[0].id);
+        setName(res.values[0].name);
+        setAddress(res.values[0].address);
+        setAvatar(res.values[0].avatar);
+        setScore(res.values[0].score);
+        await db.close();
+        sqlite.closeConnection("db_issue9");
+        return;
+      } catch (err) {
+        console.log(`Error: ${err}`);
+        return;
+      }
     };
     getDataById(currentId);
   }, []);
@@ -65,8 +73,6 @@ const EditStudent: React.FC<ContainerProps> = ({
     } else {
       setIsImage(true);
     }
-
-    // window.location.reload();
   };
 
   const handleClickDelete = async () => {
