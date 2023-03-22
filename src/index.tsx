@@ -3,13 +3,16 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+
+import { HTMLAttributes } from "react";
+
+import { Capacitor } from "@capacitor/core";
 import {
   defineCustomElements as jeepSqlite,
   applyPolyfills,
   JSX as LocalJSX,
 } from "jeep-sqlite/loader";
-import { HTMLAttributes } from "react";
-import { Capacitor } from "@capacitor/core";
+
 import {
   CapacitorSQLite,
   SQLiteConnection,
@@ -29,7 +32,6 @@ declare global {
       extends StencilToReact<LocalJSX.IntrinsicElements> {}
   }
 }
-
 applyPolyfills().then(() => {
   jeepSqlite(window);
 });
@@ -67,12 +69,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.log(db);
 
     let query = `
-    CREATE TABLE IF NOT EXISTS students (
+    CREATE TABLE IF NOT EXISTS uneti_online_config (
       id TEXT PRIMARY KEY NOT NULL,
-      name TEXT NOT NULL,
-      address TEXT,
-      avatar TEXT,
-      score FLOAT NOT NULL
+      fcm_token TEXT NOT NULL
     );
     `;
 
@@ -82,8 +81,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     const res: any = await db.execute(query);
     console.log(`res: ${JSON.stringify(res)}`);
-    await db.close();
-    await sqlite.closeConnection("db_issue9", false);
+    // await db.close();
+    // await sqlite.closeConnection("db_issue9", false);
+
     const container = document.getElementById("root");
     const root = createRoot(container!);
     root.render(

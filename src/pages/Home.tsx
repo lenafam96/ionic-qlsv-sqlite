@@ -7,35 +7,26 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
-import ListStudent from "../components/ListStudent";
-import AddStudent from "../components/AddStudent";
-import EditStudent from "../components/EditStudent";
 import "./Home.css";
 import { SQLiteDBConnection } from "react-sqlite-hook";
 import { sqlite } from "../App";
 
 const Home: React.FC = () => {
   const [data, setData] = useState<any>([]);
-  const [addPageActive, setAddPageActive] = useState(false);
-  const [editPageActive, setEditPageActive] = useState(false);
-  const [currentId, setCurrentId] = useState("");
+  const [click, setClick] = useState<any>(0);
 
-  const getData = async (sort: string = "", search: string = "") => {
+  const getData = async () => {
     try {
       let db: SQLiteDBConnection = await sqlite.createConnection("db_issue9");
       await db.open();
-      let query = "SELECT * FROM students";
-      if (search !== "") {
-        query += ` WHERE name LIKE '%${search}%'`;
-      }
-      if (sort !== "") {
-        query += " ORDER BY score " + sort;
-      }
+      let query = "SELECT * FROM uneti_online_config";
 
       let res: any = await db.query(query);
       setData(res.values);
-      await db.close();
-      sqlite.closeConnection("db_issue9");
+      console.log(res.values);
+
+      // await db.close();
+      // sqlite.closeConnection("db_issue9");
       return;
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -48,7 +39,7 @@ const Home: React.FC = () => {
       let db: SQLiteDBConnection = await sqlite.createConnection("db_issue9");
       await db.open();
       await db.run(
-        `INSERT INTO students (id,name,address,avatar,score) VALUES ('${data.id}','${data.name}','${data.address}','${data.avatar}',${data.score})`
+        `INSERT INTO uneti_online_config (id,fcm_token) VALUES ('${data.id}','${data.fcm_token}')`
       );
       await db.close();
       sqlite.closeConnection("db_issue9");
@@ -94,11 +85,8 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     getData();
-  }, [editPageActive]);
-
-  const updateCurrentId = (id: string) => {
-    setCurrentId(id);
-  };
+    console.log(click);
+  }, [click]);
 
   return (
     <IonPage>
@@ -115,39 +103,22 @@ const Home: React.FC = () => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-        {addPageActive || editPageActive ? (
-          ""
-        ) : (
-          <ListStudent
-            data={data}
-            getData={getData}
-            addPageActive={addPageActive}
-            setAddPageActive={setAddPageActive}
-            editPageActive={editPageActive}
-            setEditPageActive={setEditPageActive}
-            setId={updateCurrentId}
-          />
-        )}
-        {addPageActive ? (
-          <AddStudent
-            postData={postData}
-            addPageActive={addPageActive}
-            setAddPageActive={setAddPageActive}
-          />
-        ) : (
-          ""
-        )}
-        {editPageActive ? (
-          <EditStudent
-            putData={putData}
-            deleteData={deleteData}
-            editPageActive={editPageActive}
-            setEditPageActive={setEditPageActive}
-            currentId={currentId}
-          />
-        ) : (
-          ""
-        )}
+        {data.map((item: any) => (
+          <div key={item.id}>
+            {item.id} - {item.fcm_token}
+          </div>
+        ))}
+        <IonButton
+          onClick={() => {
+            postData({
+              id: Date.now(),
+              fcm_token: "jkasdkjfdnksjfnkasdjnfjkas",
+            });
+            setClick(click + 1);
+          }}
+        >
+          Add
+        </IonButton>
       </IonContent>
     </IonPage>
   );
