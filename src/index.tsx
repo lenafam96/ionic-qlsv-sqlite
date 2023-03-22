@@ -45,6 +45,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       document.body.appendChild(jeepEl);
       await customElements.whenDefined("jeep-sqlite");
       await sqlite.initWebStore();
+      console.log("webform");
     }
     const ret = await sqlite.checkConnectionsConsistency();
     console.log(ret);
@@ -81,15 +82,15 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     const res: any = await db.execute(query);
     console.log(`res: ${JSON.stringify(res)}`);
-    // await db.close();
-    // await sqlite.closeConnection("db_issue9", false);
+    await db.close();
+    await sqlite.closeConnection("db_issue9", false);
 
     const container = document.getElementById("root");
     const root = createRoot(container!);
     root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      // <React.StrictMode>
+      <App />
+      // </React.StrictMode>
     );
 
     // If you want your app to work offline and load faster, you can change

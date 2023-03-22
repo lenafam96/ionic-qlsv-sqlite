@@ -1,15 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   setupIonicReact,
-  useIonModal,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
@@ -33,6 +27,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import Page from "./pages/Page";
 
 interface JsonListenerInterface {
   jsonListeners: boolean;
@@ -65,22 +60,34 @@ const App: React.FC = () => {
 
   sqlite = useSQLite();
   console.log(`$$$ in App sqlite.isAvailable  ${sqlite.isAvailable} $$$`);
+  const [data, setData] = useState(null);
+
+  function handleData(data: any) {
+    setData(data);
+  }
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route path="/home">
-            <Home />
-          </Route>
+          <Route
+            path="/api/data"
+            render={({ location }) => {
+              const searchParams = new URLSearchParams(location.search);
+              const data = searchParams.get("data");
+              handleData(data);
+              return null;
+            }}
+          />
+          <Route path="/home">{data ? <Page data={data} /> : <Home />}</Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
           {/* <Route path="/add">
             <Add />
           </Route> */}
-          <Route path="/back">
-            <Redirect to="/home" />
+          <Route path="/data">
+            <Page data={"data"} />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>
