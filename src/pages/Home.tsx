@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import "./Home.css";
 import { SQLiteDBConnection } from "react-sqlite-hook";
 import { sqlite } from "../App";
-import { async } from "q";
 
 const Home: React.FC = () => {
   const [data, setData] = useState<any>([]);
